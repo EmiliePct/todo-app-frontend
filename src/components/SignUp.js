@@ -96,8 +96,8 @@ function SignUp() {
                   required
                 />
                 /* à simplifier en ternaire si possible */
-                          {matchEmail && email === matchEmail && <><p>Adresses email identiques</p><FontAwesomeIcon icon={faCheck}/></>}
-                          {matchEmail && email !== matchEmail && <><p>Veuillez saisir la même adresse email</p><FontAwesomeIcon icon={faTimes}/></>}
+                          {matchEmail && email === matchEmail && <div className={styles.warningMsg}><p>Adresses email identiques</p><FontAwesomeIcon icon={faCheck} className={styles.valid}/></div>}
+                          {matchEmail && email !== matchEmail && <div className={styles.warningMsg}><p>Veuillez saisir la même adresse email</p><FontAwesomeIcon icon={faTimes} className={styles.invalid}/></div>}
                 <input
                   className={styles.inputlogin}
                   type="password"
@@ -116,9 +116,9 @@ function SignUp() {
                   value={matchPwd}
                   required
                 />
-                {matchPwd && pwd === matchPwd && <><p>Mots de passe identiques</p><FontAwesomeIcon icon={faCheck}/></>}
-                {matchPwd && pwd !== matchPwd && <><p>Veuillez saisir le même mot de passe</p><FontAwesomeIcon icon={faTimes}/></>}
-                {pwd && !validPwd && <p>Le mot de passe ne doit pas contenir de caractère spécial et doit avoir entre 8 et 24 caractères.</p>}
+                {matchPwd && pwd === matchPwd && <p className={styles.warningMsg}>Mots de passe identiques<FontAwesomeIcon icon={faCheck} className={styles.valid}/></p>}
+                {matchPwd && pwd !== matchPwd && <p className={styles.warningMsg}>Veuillez saisir le même mot de passe<FontAwesomeIcon icon={faTimes} className={styles.invalid}/></p>}
+                {pwd && !validPwd && <p className={styles.warningMsg}>Le mot de passe ne doit pas contenir de caractère spécial et doit avoir entre 8 et 24 caractères.<FontAwesomeIcon icon={faInfoCircle} className={styles.info}/></p>}
       
                 {/* {errMsg && <p>{errMsg}</p>} */}
                 
@@ -134,7 +134,11 @@ function SignUp() {
           );
 
       } else {
-        return <p>Bravo vous avez créé votre compte ! Vous pouvez maintenant vous connecter.</p>
+        return (
+        <div className={styles.loginSection}>
+<p>Bravo vous avez créé votre compte ! Vous pouvez maintenant vous connecter.</p>
+</div>
+)
       }
    
    }

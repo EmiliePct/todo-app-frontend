@@ -21,8 +21,8 @@
 
 
 .loginSection {
-  /* width: 250px;
-	margin: 10px; */
+  max-width: 300px;
+	margin: 10px;
   display: flex;
   flex-direction: column;
   border: 1px solid red;
@@ -48,5 +48,28 @@
     background-color: white;
     border-radius: 20px;
     border: 1px solid transparent;
-    margin:
   }
+
+  .warningMsg {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    font-size: 12px;
+    width: 250px;
+
+}
+
+  .invalid {
+    color: red;
+    margin-left: 0.25rem;
+}
+
+.valid {
+    color: limegreen;
+    margin-left: 0.25rem;
+}
+
+.info {
+    color: orange;
+    margin-left: 0.25rem;
+}

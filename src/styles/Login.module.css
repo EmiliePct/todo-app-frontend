@@ -1,0 +1,52 @@
+.body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    min-height: 100vh;
+    min-width: 100vh;
+    background-color: #98cff1;
+
+}
+
+.header {
+    margin: 60px;
+}
+
+.main{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+
+
+.loginSection {
+  /* width: 250px;
+	margin: 10px; */
+  display: flex;
+  flex-direction: column;
+  border: 1px solid red;
+  margin: 20px;
+  align-items: center;
+}
+
+.inputlogin {
+  font-size: 12px;
+    padding: 0.25rem;
+  border-radius: 0.5rem;
+
+    width: 250px;
+    height: 40px;
+    margin: 10px;
+    border: solid 1px white;
+    border-radius: 5px;
+    background-color: #151d26;
+    color: white;
+  }
+
+  .buttonconfirminput {
+    background-color: white;
+    border-radius: 20px;
+    border: 1px solid transparent;
+    margin:
+  }

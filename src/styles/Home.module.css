@@ -21,3 +21,25 @@
 .title a:hover, .title a:focus, .title a:active {
   text-decoration: underline;
 }
+
+// Note: These styles do not account for any paddings/margins that you may need.
+
+.body {
+  display: flex;
+  height: 100vh;
+}
+
+.mdc-drawer-app-content {
+  flex: auto;
+  overflow: auto;
+  position: relative;
+}
+
+.main-content {
+  overflow: auto;
+  height: 100%;
+}
+
+.app-bar {
+  position: absolute;
+}

@@ -136,11 +136,10 @@ function SignUp() {
       } else {
         return (
         <div className={styles.loginSection}>
-<p>Bravo vous avez créé votre compte ! Vous pouvez maintenant vous connecter.</p>
-</div>
-)
+            <p>Bravo vous avez créé votre compte ! Vous pouvez maintenant vous connecter.</p>
+        </div>
+        )
       }
-   
    }
    
    export default SignUp;

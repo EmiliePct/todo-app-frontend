@@ -1,27 +1,39 @@
 import styles from '../styles/Login.module.css';
 import { useState } from "react";
+import { apiSignIn } from "@/api/users"; 
+import { useDispatch } from "react-redux";
+import { sign } from 'jsonwebtoken';
+import { signIn } from "../reducers/user";
+
+
+
 
 function SignIn() {
 
     const [email, setEmail] = useState('');
     const [pwd, setPwd] = useState('');
+    const [error, setError] = useState("");
 
-    const handleSignIn = () => {
-        fetch("http://localhost:3000/auth/signin", {
-          method: "POST",
-          headers: { "Content-Type": "application/json"},
-          body: JSON.stringify({
-            email: email,
-            pwd: pwd,
-          }),
-        })
-          .then((response) => response.json())
-          .then((data) => {
-            //il faut récupérer le token et l'enregistrer qq part
-            // et vider les champs ?
-              console.log(data)
-            })
-      };
+
+const dispatch = useDispatch();
+
+
+    const handleSignIn = async () => {
+      if (!email || !pwd) {
+        setError("L'email et le mot de passe sont obligatoires.");
+        return;
+      }
+      const data = await apiSignIn(email, pwd)
+        if (data) {
+          dispatch(signIn({
+            userId: data.userId, //à envoyer côté back
+            accessToken: data.accessToken,
+            isConnected: true,
+          }));
+        } else {
+          setError(`Login failed: ${data ? data.error : "Erreur inconnue"}`);
+        }
+    }
 
     return (
       <div className={styles.main}>

@@ -22,8 +22,6 @@
   text-decoration: underline;
 }
 
-// Note: These styles do not account for any paddings/margins that you may need.
-
 .body {
   display: flex;
   height: 100vh;

@@ -1,13 +1,13 @@
 import Home from '../components/Home';
-// import React from 'react';
 import Login from '../components/Login';
+import { useSelector } from "react-redux";
 
+export default function Index() {
+  const user = useSelector(state => state.user.value)
 
-function Index() {
-
-  // ultérieurement, faire une conditionnelle si l'utilisateur est connecté, alors aller vers homme, sinon Login.
-  // return <Login />;
-  return <Home />;
+  if (user.isConnected) {
+    return <Home />
+  } else {
+    return <Login />
+  }
 }
-
-export default Index;

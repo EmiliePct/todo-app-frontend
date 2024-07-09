@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-  value: { token: null, userId: null, isConnected: false },
+  value: { accessToken: null, userId: null, isConnected: false },
 };
 
 export const userSlice = createSlice({
@@ -9,13 +9,13 @@ export const userSlice = createSlice({
   initialState,
   reducers: {
     signIn: (state, action) => {
-      state.value.token = action.payload.token;
+      state.value.accessToken = action.payload.accessToken;
       state.value.userId = action.payload.userId;
       state.value.isConnected = true;
     },
     signOut: (state) => {
         console.log('rentré dans le reducer')
-      state.value.token = null;
+      state.value.accessToken = null;
       state.value.userId = null;
       state.value.isConnected = false;
     },

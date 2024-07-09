@@ -34,6 +34,7 @@ import MailIcon from '@mui/icons-material/Mail';
 import MenuIcon from '@mui/icons-material/Menu';
 
 import { useState } from "react";
+import DrawerList from './DrawerList';
 
 
 export default function TemporaryDrawer() {
@@ -43,42 +44,11 @@ export default function TemporaryDrawer() {
     setOpen(newOpen);
   };
 
-  const DrawerList = (
-    <Box sx={{ width: 250 }} role="presentation" onClick={toggleDrawer(false)}>
-      <List>
-        {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-          <ListItem key={text} disablePadding>
-            <ListItemButton>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItemButton>
-          </ListItem>
-        ))}
-      </List>
-      <Divider />
-      <List>
-        {['All mail', 'Trash', 'Spam'].map((text, index) => (
-          <ListItem key={text} disablePadding>
-            <ListItemButton>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItemButton>
-          </ListItem>
-        ))}
-      </List>
-    </Box>
-  );
-
   return (
     <AppBar>
       <header>      <Button onClick={toggleDrawer(true)}><MenuIcon color="secondary"></MenuIcon></Button><span>To-do App</span></header>
-
       <Drawer open={open} onClose={toggleDrawer(false)}>
-        {DrawerList}
+        <DrawerList />
       </Drawer>
     </AppBar>
   );

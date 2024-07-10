@@ -4,7 +4,6 @@ import { AppBar } from '@mui/material';
 import Drawer from '@mui/material/Drawer';
 import Container from '@mui/material/Container';
 import MenuIcon from '@mui/icons-material/Menu';
-import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 
 
@@ -32,7 +31,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 
-import { getLists, displayList, createList, deleteList } from '../api/lists';
+import { getLists, createList, deleteList } from '../api/lists';
 
 import { useEffect, useState, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -88,13 +87,13 @@ export default function Home() {
   const listsForDisplay = lists.map((list) => {
     return (
       <List component="div" disablePadding key={list.id}>
-<ListItemButton sx={{ pl: 4 }} onClick={() => handleListDisplay(list.id)}>
-<ListItemIcon>
-    <ChecklistIcon />
-  </ListItemIcon>
-  <ListItemText primary={list.title} />
-</ListItemButton>
-</List>
+        <ListItemButton sx={{ pl: 4 }} onClick={() => handleListDisplay(list.id)}>
+          <ListItemIcon>
+            <ChecklistIcon />
+          </ListItemIcon>
+          <ListItemText primary={list.title} />
+        </ListItemButton>
+      </List>
     )
   })
  

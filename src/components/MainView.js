@@ -11,9 +11,8 @@ import TextField from '@mui/material/TextField';
 import Divider from '@mui/material/Divider';
 import Button from '@mui/material/Button';
 
-
-
 import { displayTasks, createTask } from '../api/tasks';
+import TaskItemList from './TaskItemList';
 
 
 import Accordion from '@mui/material/Accordion';
@@ -41,44 +40,63 @@ export default function MainView() {
     const [taskTitle, setTaskTitle] = useState("");
     const [taskDescription, setTaskDescription] = useState("");
     const [taskDeadline, settaskDeadline] = useState();
+    const [changesCount, setChangesCount] = useState(0)
 
 
     console.log('je vais afficher', displaying.listId)
 
     // ------ Hook d'effet pour stocker les tâches dans un état ------ // 
-    // useEffect(() => {
-    //     displayTasks(displaying.listId, user.accessToken)
-    //         .then((data) => {
-    //         if (data) {
-    //             setTasks(data);
-    //         }
-    //         })
-    //         .catch((error) => {
-    //         setError("Échec de la récupération des listes: " + error.message);
-    //         console.error("Erreur API:", error);
-    //         });
-    //     }, [/*newList, openCreationDialog, openDeletionDialog*/]);
+    useEffect(() => {
+        displayTasks(displaying.listId, user.accessToken)
+            .then((data) => {
+            if (data) {
+                setTasks(data);
+            }
+            })
+            .catch((error) => {
+            setError("Échec de la récupération des listes: " + error.message);
+            console.error("Erreur API:", error);
+            });
+        }, [changesCount/*newList, openCreationDialog, openDeletionDialog*/]);
         
         console.log('tasks',tasks)
 
-        const handleSubmit = async () => {
-            console.log(taskTitle, taskDescription, taskDeadline, user)
-            if (!taskTitle || !taskDeadline) {
-              setError("Le nom et la date sont obligatoires.");
-              return;
+    const handleSubmit = async () => {
+        console.log(taskTitle, taskDescription, taskDeadline, user)
+        if (!taskTitle || !taskDeadline) {
+            setError("Le nom et la date sont obligatoires.");
+            return;
+        }
+        const data = await createTask(taskTitle, taskDescription, taskDeadline, user, displaying.listId);
+            if (data) {
+                setChangesCount(changesCount+1);
+            console.log(data)
+            // dispatch(signIn({
+            //   userId: data.userId,
+            //   accessToken: data.accessToken,
+            //   isConnected: true,
+            // }));
+            } else {
+            setError(`${data ? data.error : "Erreur inconnue"}`);
             }
-            const data = await createTask(taskTitle, taskDescription, taskDeadline, user, displaying.listId);
-              if (data) {
-                console.log(data)
-                // dispatch(signIn({
-                //   userId: data.userId,
-                //   accessToken: data.accessToken,
-                //   isConnected: true,
-                // }));
-              } else {
-                setError(`${data ? data.error : "Erreur inconnue"}`);
-              }
-          }
+        }
+
+// ------ Filtre les tâches à afficher en fonction du statut ------ // 
+const getCompletedTasks = tasks.filter(task => task.is_done);
+const getUncompletedTasks = tasks.filter(task => !task.is_done);
+
+const displayUnCompletedTasks = getUncompletedTasks.map((task)  => {
+    return (
+      <TaskItemList title={task.title} key={task.id} id={task.id} isCompleted={false} />
+    )
+  })
+
+  const displayCompletedTasks = getCompletedTasks.map((task)  => {
+    return (
+      <TaskItemList title={task.title} key={task.id} id={task.id} isCompleted={true} />
+    )
+  })
+
   
     return (
       <Container   
@@ -112,7 +130,6 @@ export default function MainView() {
                     value={taskTitle}
                 />
                 <TextField
-                    required
                     id="taskdescription-input"
                     label="Description de la nouvelle tâche"
                     variant="filled"
@@ -131,7 +148,7 @@ export default function MainView() {
             //   alignItems="space-between"
               sx={{ bgcolor: "#cfe8fc", height: "100%", width:"45%", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "space-between"}}>
                 <DesktopDatePicker
-                label={"JJ/MM/AA"}
+                label={"Echéance*"}
                 disablePast
                 onChange={settaskDeadline}
                 value={taskDeadline }
@@ -161,9 +178,11 @@ export default function MainView() {
           }/>
         <Box       
           display="flex"
-          alignItems="center"
+          flexDirection="column"
+          alignItems="space-between"
           sx={{ bgcolor: '#cfe8ac', height: "auto", width:"100%", padding:"20px"}}>
-          Je montre les tâches de la liste
+            {displayUnCompletedTasks}
+            {displayCompletedTasks}
         </Box>
       </Container>
 );

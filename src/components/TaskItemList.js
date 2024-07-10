@@ -29,6 +29,7 @@ function TaskItemList(props) {
         const data = await updateUnCompletionTask(id, user);
             if (data) {
             console.log(data)
+            props.updateMade(1);
             } else {
             setError(`${data ? data.error : "Erreur inconnue"}`);
             }
@@ -38,6 +39,7 @@ function TaskItemList(props) {
         const data = await updateCompletionTask(id, user);
             if (data) {
             console.log(data)
+            props.updateMade(1);
             } else {
             setError(`${data ? data.error : "Erreur inconnue"}`);
             }

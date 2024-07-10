@@ -42,6 +42,9 @@ export default function MainView() {
     const [taskDeadline, settaskDeadline] = useState();
     const [changesCount, setChangesCount] = useState(0)
 
+    const updateMade = () => (
+        setChangesCount(changesCount+1)
+    )
 
     console.log('je vais afficher', displaying.listId)
 
@@ -87,13 +90,13 @@ const getUncompletedTasks = tasks.filter(task => !task.is_done);
 
 const displayUnCompletedTasks = getUncompletedTasks.map((task)  => {
     return (
-      <TaskItemList title={task.title} key={task.id} id={task.id} isCompleted={false} />
+      <TaskItemList title={task.title} key={task.id} id={task.id} isCompleted={false} updateMade={updateMade} />
     )
   })
 
   const displayCompletedTasks = getCompletedTasks.map((task)  => {
     return (
-      <TaskItemList title={task.title} key={task.id} id={task.id} isCompleted={true} />
+      <TaskItemList title={task.title} key={task.id} id={task.id} isCompleted={true} updateMade={updateMade}/>
     )
   })
 

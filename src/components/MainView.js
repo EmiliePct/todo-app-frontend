@@ -15,6 +15,7 @@ import { displayTasks, createTask } from '../api/tasks';
 import TaskItemList from './TaskItemList';
 
 
+
 import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
@@ -60,7 +61,7 @@ export default function MainView() {
             setError("Échec de la récupération des listes: " + error.message);
             console.error("Erreur API:", error);
             });
-        }, [changesCount/*newList, openCreationDialog, openDeletionDialog*/]);
+        }, [changesCount, displaying.listId]);
         
         console.log('tasks',tasks)
 
@@ -90,13 +91,18 @@ const getUncompletedTasks = tasks.filter(task => !task.is_done);
 
 const displayUnCompletedTasks = getUncompletedTasks.map((task)  => {
     return (
-      <TaskItemList title={task.title} key={task.id} id={task.id} isCompleted={false} updateMade={updateMade} />
+        <AccordionDetails>
+            <TaskItemList title={task.title} key={task.id} id={task.id} isCompleted={false} updateMade={updateMade} />
+        </AccordionDetails>
+      
     )
   })
 
   const displayCompletedTasks = getCompletedTasks.map((task)  => {
     return (
-      <TaskItemList title={task.title} key={task.id} id={task.id} isCompleted={true} updateMade={updateMade}/>
+        <AccordionDetails>
+            <TaskItemList title={task.title} key={task.id} id={task.id} isCompleted={true} updateMade={updateMade}/>
+        </AccordionDetails>
     )
   })
 
@@ -165,10 +171,7 @@ const displayUnCompletedTasks = getUncompletedTasks.map((task)  => {
                 // }}
               />
               <Button variant="contained" sx={{ margin: "20px"}} onClick={() => handleSubmit()} >Créer</Button>
-                
-
             </Box>
-
         </Box>
         <Divider 
           sx={{
@@ -183,9 +186,31 @@ const displayUnCompletedTasks = getUncompletedTasks.map((task)  => {
           display="flex"
           flexDirection="column"
           alignItems="space-between"
-          sx={{ bgcolor: '#cfe8ac', height: "auto", width:"100%", padding:"20px"}}>
-            {displayUnCompletedTasks}
-            {displayCompletedTasks}
+          sx={{ height: "auto", width:"100%", padding:"20px"}}>
+            <Accordion defaultExpanded>
+        <AccordionSummary
+          expandIcon={<ExpandMoreIcon />}
+          aria-controls="panel1-content"
+          id="panel1-header"
+        >
+          <Typography>Tâches à réaliser</Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+        {displayUnCompletedTasks}
+        </AccordionDetails>
+      </Accordion>
+      <Accordion>
+        <AccordionSummary
+          expandIcon={<ExpandMoreIcon />}
+          aria-controls="panel1-content"
+          id="panel1-header"
+        >
+          <Typography>Tâches réalisées</Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+        {displayCompletedTasks}
+        </AccordionDetails>
+      </Accordion>
         </Box>
       </Container>
 );

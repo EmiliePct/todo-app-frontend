@@ -13,7 +13,7 @@ import Button from '@mui/material/Button';
 
 
 
-import { displayTasks } from '../api/tasks';
+import { displayTasks, createTask } from '../api/tasks';
 
 
 import Accordion from '@mui/material/Accordion';
@@ -38,26 +38,47 @@ export default function MainView() {
 
     const [tasks, setTasks] = useState([]); 
     const [error, setError] = useState("");
-    const [date, setDate] = useState();
+    const [taskTitle, setTaskTitle] = useState("");
+    const [taskDescription, setTaskDescription] = useState("");
+    const [taskDeadline, settaskDeadline] = useState();
 
 
     console.log('je vais afficher', displaying.listId)
 
     // ------ Hook d'effet pour stocker les tâches dans un état ------ // 
-    useEffect(() => {
-        displayTasks(displaying.listId, user.accessToken)
-            .then((data) => {
-            if (data) {
-                setTasks(data);
-            }
-            })
-            .catch((error) => {
-            setError("Échec de la récupération des listes: " + error.message);
-            console.error("Erreur API:", error);
-            });
-        }, [/*newList, openCreationDialog, openDeletionDialog*/]);
+    // useEffect(() => {
+    //     displayTasks(displaying.listId, user.accessToken)
+    //         .then((data) => {
+    //         if (data) {
+    //             setTasks(data);
+    //         }
+    //         })
+    //         .catch((error) => {
+    //         setError("Échec de la récupération des listes: " + error.message);
+    //         console.error("Erreur API:", error);
+    //         });
+    //     }, [/*newList, openCreationDialog, openDeletionDialog*/]);
         
-        console.log(tasks)
+        console.log('tasks',tasks)
+
+        const handleSubmit = async () => {
+            console.log(taskTitle, taskDescription, taskDeadline, user)
+            if (!taskTitle || !taskDeadline) {
+              setError("Le nom et la date sont obligatoires.");
+              return;
+            }
+            const data = await createTask(taskTitle, taskDescription, taskDeadline, user, displaying.listId);
+              if (data) {
+                console.log(data)
+                // dispatch(signIn({
+                //   userId: data.userId,
+                //   accessToken: data.accessToken,
+                //   isConnected: true,
+                // }));
+              } else {
+                setError(`${data ? data.error : "Erreur inconnue"}`);
+              }
+          }
   
     return (
       <Container   
@@ -87,6 +108,8 @@ export default function MainView() {
                     sx={{ marginBottom: "10px"}}
                     fullWidth
                     size="small"
+                    onChange={(e) => setTaskTitle(e.target.value)}
+                    value={taskTitle}
                 />
                 <TextField
                     required
@@ -98,6 +121,8 @@ export default function MainView() {
                     size="small"
                     margin="0"
                     fullWidth
+                    onChange={(e) => setTaskDescription(e.target.value)}
+                    value={taskDescription}
                 />
             </Box>
             <Box
@@ -108,8 +133,8 @@ export default function MainView() {
                 <DesktopDatePicker
                 label={"JJ/MM/AA"}
                 disablePast
-                onChange={setDate}
-                value={date}
+                onChange={settaskDeadline}
+                value={taskDeadline }
 
                 // styles
                 // sx={{
@@ -119,7 +144,7 @@ export default function MainView() {
                 //   openPickerIcon: { color: "#fff" },
                 // }}
               />
-              <Button variant="contained" sx={{ margin: "20px"}}>Créer</Button>
+              <Button variant="contained" sx={{ margin: "20px"}} onClick={() => handleSubmit()} >Créer</Button>
                 
 
             </Box>

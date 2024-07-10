@@ -15,7 +15,7 @@ function SignIn() {
     const [error, setError] = useState("");
 
 
-const dispatch = useDispatch();
+    const dispatch = useDispatch();
 
 
     const handleSignIn = async () => {
@@ -23,10 +23,10 @@ const dispatch = useDispatch();
         setError("L'email et le mot de passe sont obligatoires.");
         return;
       }
-      const data = await apiSignIn(email, pwd)
+      const data = await apiSignIn(email, pwd);
         if (data) {
           dispatch(signIn({
-            userId: data.userId, //à envoyer côté back
+            userId: data.userId,
             accessToken: data.accessToken,
             isConnected: true,
           }));

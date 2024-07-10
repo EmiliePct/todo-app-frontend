@@ -1,90 +1,271 @@
-// import styles from '../styles/Home.module.css';
-// import { useDispatch, useSelector } from "react-redux";
-
-// import { signOut } from "../reducers/user";
-// import { Drawer, AppBar, Icon, IconButton, MenuIcon } from '@mui/material';
-
-
-// par défaut : affiche texte qu'il n'y a rien à voir.
-/* 
-
-icone de menu 
-- composant left sidebar si icone dépliée
-qui contiendra lui même :
-  - bouton de création de liste (ou champ de nom +icone ?)
-  - composant list-item-menu autant de fois qu'il y a de listes avec deux icones voir et suppression
-- main content avec :
-  - par défaut : affiche texte qu'il n'y a rien à voir.
-  - sinon composant 'task item overview' (en deux catégories ?)
-- right sidebar sous forme de composant 
-
-*/
 import { AppBar } from '@mui/material';
-import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
-import Button from '@mui/material/Button';
+import MenuIcon from '@mui/icons-material/Menu';
+
+import MainView from './MainView';
+
 import List from '@mui/material/List';
-import Divider from '@mui/material/Divider';
-import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import MailIcon from '@mui/icons-material/Mail';
-import MenuIcon from '@mui/icons-material/Menu';
+import Collapse from '@mui/material/Collapse';
+import CreateNewFolderIcon from '@mui/icons-material/CreateNewFolder';
+import FolderIcon from '@mui/icons-material/Folder';
+import DeleteIcon from '@mui/icons-material/Delete';
+import ChecklistIcon from '@mui/icons-material/Checklist';
+import VisibilityIcon from '@mui/icons-material/Visibility';
 
-import { useState } from "react";
-import DrawerList from './DrawerList';
+import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
 
 
-export default function TemporaryDrawer() {
-  const [open, setOpen] = useState(false);
+import ExpandLess from '@mui/icons-material/ExpandLess';
+import ExpandMore from '@mui/icons-material/ExpandMore';
+import StarBorder from '@mui/icons-material/StarBorder';
 
+import { getLists, displayList, createList, deleteList } from '../api/lists';
+
+import { useEffect, useState, useMemo } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { displayingList } from '../reducers/displaying';
+
+
+export default function Home() {
+  const displaying = useSelector(state => state.displaying.value)
+  const user = useSelector(state => state.user.value)
+
+  const dispatch = useDispatch();
+
+  const [openDrawer, setOpenDrawer] = useState(false);
+  const [openDisplayList, setOpenDisplayList] = useState(true);
+  const [openDeleteList, setOpenDeleteList] = useState(false);
+  const [openCreationDialog, setOpenCreationDialog] = useState(false);
+  const [openDeletionDialog, setOpenDeletionDialog] = useState(false);
+  const [newList, setNewList] = useState(''); // input list creation dialog
+  const [listToDelete, setListToDelete] = useState();
+  const [lists, setLists] = useState([]); 
+  const [error, setError] = useState("");
+
+
+  // ------ Pour gérer ouverture/fermeture du drawer gauche ------ // 
   const toggleDrawer = (newOpen) => () => {
-    setOpen(newOpen);
+    setOpenDrawer(newOpen);
+  };
+
+  // ------ Pour gérer ouverture/fermeture des sous-menus ------ // 
+  const handleClickDisplayList = () => {
+    setOpenDisplayList(!openDisplayList);
+  };
+
+  const handleClickDisplayDelete = () => {
+    setOpenDeleteList(!openDeleteList);
+  };
+
+    // ------ Hook d'effet pour stocker les listes dans un état ------ // 
+  useEffect(() => {
+    getLists(user.userId, user.accessToken)
+      .then((data) => {
+        if (data) {
+          setLists(data);
+        }
+      })
+      .catch((error) => {
+        setError("Échec de la récupération des listes: " + error.message);
+        console.error("Erreur API:", error);
+      });
+  }, [newList, openCreationDialog, openDeletionDialog]);
+
+  
+  // ------ Map des listes à afficher dans le sous-menu de "Consulter" ------ // 
+  const listsForDisplay = lists.map((list) => {
+    return (
+      <List component="div" disablePadding key={list.id}>
+<ListItemButton sx={{ pl: 4 }} onClick={() => handleListDisplay(list.id)}>
+<ListItemIcon>
+    <ChecklistIcon />
+  </ListItemIcon>
+  <ListItemText primary={list.title} />
+</ListItemButton>
+</List>
+    )
+  })
+ 
+  // ------ Afficher une liste en particulier ------ // 
+  const handleListDisplay = listId => {
+    console.log('click affichage', listId);
+    dispatch(displayingList({ listId }));
+    setOpenDrawer(false);
+    //lancer un get dans le composant MainView et vérifier si re-render de la home pour afficher le contenu
+  }
+  
+  // ------ Modale de création de liste ------ //
+  
+  const handleClickOpenCreationDialog = () => {
+    console.log('click ouverture')
+    setOpenCreationDialog(true);
+  };
+  
+  const handleCloseCreationDialog = () => {
+    console.log('click fermeture')
+    setOpenCreationDialog(false);
+  };
+  
+  const handleSubmitCreationDialog = async (newList) => {
+    const title = newList;
+    setNewList('');
+    createList(title, user)
+    .then((data) => {
+      if (data) {
+        handleCloseCreationDialog();
+      }
+    })
+    .catch((error) => {
+      setError("Échec de la récupération des listes: " + error.message);
+      console.error("Erreur API:", error);
+    });
+  };
+  
+  // ------ Map des listes à supprimer à afficher les listes dans le sous-menu de "Supprimer" ------ //
+
+  const listsForDeletion = lists.map((list) => {
+      return (
+  <ListItemButton sx={{ pl: 4 }} key={list.id} onClick={() => handleClickOpenDeletionDialog(list.id)}>
+  <ListItemIcon>
+      <DeleteIcon />
+    </ListItemIcon>
+    <ListItemText primary={list.title} />
+  </ListItemButton>
+      )
+    })
+
+  // ------ Modale de suppression de liste ------ //
+
+  const handleClickOpenDeletionDialog = (listId) => {
+    console.log('click poubelle ouverture modale', listId)
+    setListToDelete(listId)
+    setOpenDeletionDialog(true);
+  };
+
+  const handleCloseDeletionDialog = () => {
+    console.log('click fermeture')
+    setListToDelete('')
+    setOpenDeletionDialog(false);
+  };
+
+  const handleClickConfirmDeletion = () => {
+    deleteList(listToDelete, user)
+    .then((data) => {
+      if (data) {
+        handleCloseDeletionDialog();
+      }
+    })
+    .catch((error) => {
+      setError("Échec de la récupération des listes: " + error.message);
+      console.error("Erreur API:", error);
+    });
   };
 
   return (
-    <AppBar>
-      <header>      <Button onClick={toggleDrawer(true)}><MenuIcon color="secondary"></MenuIcon></Button><span>To-do App</span></header>
-      <Drawer open={open} onClose={toggleDrawer(false)}>
-        <DrawerList />
-      </Drawer>
-    </AppBar>
+    <>
+      <AppBar>
+        <header>
+          <Button onClick={toggleDrawer(true)}><MenuIcon color="secondary"></MenuIcon></Button><span>To-do App</span>
+        </header>
+        <Drawer open={openDrawer} onClose={toggleDrawer(false)}>
+          <List
+            sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
+            component="nav">
+            <Dialog
+              open={openCreationDialog}
+              onClose={handleCloseCreationDialog}
+              PaperProps={{
+              component: 'form',
+              onSubmit: (event) => {
+                event.preventDefault();
+                setNewList(event.currentTarget)
+                handleSubmitCreationDialog(newList)
+              }}}
+              >
+                <DialogTitle>Créer une nouvelle liste</DialogTitle>
+                <DialogContent>
+                  <DialogContentText>
+                    Veuillez saisir le nom de votre nouvelle liste de tâches. Ce nom doit être unique parmi vos listes.
+                  </DialogContentText>
+                  <TextField
+                    autoFocus
+                    required
+                    margin="dense"
+                    id="listName"
+                    name="listName"
+                    label="Nom de la nouvelle liste"
+                    type="texte"
+                    fullWidth
+                    variant="standard"
+                    onChange={(e) => setNewList(e.target.value)}
+                    value={newList}
+                  />
+                </DialogContent>
+                <DialogActions>
+                  <Button onClick={handleCloseCreationDialog}>Annuler</Button>
+                  <Button type="submit">Créer</Button>
+                </DialogActions>
+              </Dialog>
+              <Dialog
+                open={openDeletionDialog}
+                onClose={handleCloseCreationDialog}
+                aria-labelledby="alert-dialog-deletion"      >
+                <DialogTitle id="alert-dialog-title">
+                  {"Voulez-vous vraiment supprimer la liste ?"}
+                </DialogTitle>
+                <DialogContent>
+                  <DialogContentText id="alert-dialog-description">
+                    La liste que vous tentez de supprimer contient peut-être des tâches. Si vous supprimez cette liste, vous supprimerez également les tâches qu'elle contient.
+                  </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                  <Button onClick={handleCloseDeletionDialog}>Annuler</Button>
+                  <Button onClick={handleClickConfirmDeletion} autoFocus>
+                    Supprimer la liste et les tâches associées
+                  </Button>
+                </DialogActions>
+              </Dialog>
+              <ListItemButton onClick={handleClickOpenCreationDialog}>
+                <ListItemIcon>
+                  <CreateNewFolderIcon />
+                </ListItemIcon>
+                <ListItemText primary="Créer une liste" />
+              </ListItemButton>
+              <ListItemButton onClick={handleClickDisplayList}>
+                <ListItemIcon>
+                  <FolderIcon />
+                </ListItemIcon>
+                <ListItemText primary="Consulter une liste" />
+                {openDisplayList ? <ExpandLess /> : <ExpandMore />}
+              </ListItemButton>
+              <Collapse in={openDisplayList} timeout="auto" unmountOnExit>
+                {listsForDisplay}
+              </Collapse>
+              <ListItemButton onClick={handleClickDisplayDelete}>
+                <ListItemIcon>
+                  <DeleteIcon />
+                </ListItemIcon>
+                <ListItemText primary="Supprimer une liste" />
+                {openDeleteList ? <ExpandLess /> : <ExpandMore />}
+              </ListItemButton>
+              <Collapse in={openDeleteList} timeout="auto" unmountOnExit>
+              {listsForDeletion}
+              </Collapse>
+            </List>
+          </Drawer>
+          </AppBar>
+          <body>
+            <MainView />
+          </body>
+        </>
   );
 }
-
-// function Home() {
-
-//   const dispatch = useDispatch();
-
-
-//   const handleSignOut = () => {
-//     dispatch(signOut());
-//   };
-
-
-//   return (
-//     <body>
-//       <p>c'est la page home</p>
-//       <AppBar>
-//         {/* <IconButton color="secondary" aria-label="open menu">
-//           <MenuIcon />
-//         </IconButton> */}
-//         <p>c'est l'AppBar</p>
-//       </AppBar>
-//       <Drawer>
-//         <p>c'est le Drawer</p>
-//       </Drawer>
-//       <button
-//         className={styles.buttonconfirminput}
-//         id="signOut"
-//         onClick={() => handleSignOut()}
-//       >
-//         Déconnexion
-//       </button>
-//     </body>
-//   );
-// }
-
-// export default Home;

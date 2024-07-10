@@ -1,6 +1,7 @@
 import '../styles/globals.css';
 import Head from 'next/head';
 
+
 //pour store redux
 import { Provider } from "react-redux";
 import { persistStore, persistReducer } from "redux-persist";
@@ -8,8 +9,9 @@ import { PersistGate } from "redux-persist/integration/react";
 import storage from "redux-persist/lib/storage";
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import user from "../reducers/user";
+import displaying from "../reducers/displaying";
 
-const reducers = combineReducers({ user });
+const reducers = combineReducers({ user, displaying });
 const persistConfig = { key: "todo-app", storage };
 
 const store = configureStore({

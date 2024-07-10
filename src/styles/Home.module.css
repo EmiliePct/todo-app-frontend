@@ -37,14 +37,3 @@
   overflow: auto;
   height: 100%;
 }
-
-.AppBar {
-  flex-direction: column;
-  width: 100%;
-  box-sizing: border-box;
-  position: fixed;
-  top: 0px;
-  left: auto;
-  right: 0px;
-  padding: 8px 16px;
-}

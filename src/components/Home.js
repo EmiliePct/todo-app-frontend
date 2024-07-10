@@ -1,7 +1,14 @@
+import styles from '../styles/Home.module.css';
+
 import { AppBar } from '@mui/material';
 import Drawer from '@mui/material/Drawer';
+import Container from '@mui/material/Container';
 import MenuIcon from '@mui/icons-material/Menu';
+import IconButton from '@mui/material/IconButton';
+import Typography from '@mui/material/Typography';
 
+
+import Toolbar from '@mui/material/Toolbar';
 import MainView from './MainView';
 
 import List from '@mui/material/List';
@@ -13,7 +20,6 @@ import CreateNewFolderIcon from '@mui/icons-material/CreateNewFolder';
 import FolderIcon from '@mui/icons-material/Folder';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ChecklistIcon from '@mui/icons-material/Checklist';
-import VisibilityIcon from '@mui/icons-material/Visibility';
 
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
@@ -23,17 +29,14 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 
-
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
-import StarBorder from '@mui/icons-material/StarBorder';
 
 import { getLists, displayList, createList, deleteList } from '../api/lists';
 
 import { useEffect, useState, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { displayingList } from '../reducers/displaying';
-
 
 export default function Home() {
   const displaying = useSelector(state => state.displaying.value)
@@ -171,49 +174,59 @@ export default function Home() {
   };
 
   return (
-    <>
+    <Container>
       <AppBar>
-        <header>
-          <Button onClick={toggleDrawer(true)}><MenuIcon color="secondary"></MenuIcon></Button><span>To-do App</span>
-        </header>
-        <Drawer open={openDrawer} onClose={toggleDrawer(false)}>
-          <List
-            sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
-            component="nav">
-            <Dialog
-              open={openCreationDialog}
-              onClose={handleCloseCreationDialog}
-              PaperProps={{
-              component: 'form',
-              onSubmit: (event) => {
-                event.preventDefault();
-                setNewList(event.currentTarget)
-                handleSubmitCreationDialog(newList)
-              }}}
-              >
-                <DialogTitle>Créer une nouvelle liste</DialogTitle>
-                <DialogContent>
-                  <DialogContentText>
-                    Veuillez saisir le nom de votre nouvelle liste de tâches. Ce nom doit être unique parmi vos listes.
-                  </DialogContentText>
-                  <TextField
-                    autoFocus
-                    required
-                    margin="dense"
-                    id="listName"
-                    name="listName"
-                    label="Nom de la nouvelle liste"
-                    type="texte"
-                    fullWidth
-                    variant="standard"
-                    onChange={(e) => setNewList(e.target.value)}
-                    value={newList}
-                  />
-                </DialogContent>
-                <DialogActions>
-                  <Button onClick={handleCloseCreationDialog}>Annuler</Button>
-                  <Button type="submit">Créer</Button>
-                </DialogActions>
+          <Toolbar>
+            <Button onClick={toggleDrawer(true)}>
+              <MenuIcon sx={{ color: '#fff' }}>
+              </MenuIcon>
+            </Button>
+            <Typography
+            variant="h6"
+            component="div"
+            sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
+            >
+            To-do App
+            </Typography>
+          </Toolbar>
+          <Drawer open={openDrawer} onClose={toggleDrawer(false)}>
+            <List
+              sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
+              component="nav">
+              <Dialog
+                open={openCreationDialog}
+                onClose={handleCloseCreationDialog}
+                PaperProps={{
+                component: 'form',
+                onSubmit: (event) => {
+                  event.preventDefault();
+                  setNewList(event.currentTarget)
+                  handleSubmitCreationDialog(newList)
+                }}}
+                >
+                  <DialogTitle>Créer une nouvelle liste</DialogTitle>
+                  <DialogContent>
+                    <DialogContentText>
+                      Veuillez saisir le nom de votre nouvelle liste de tâches. Ce nom doit être unique parmi vos listes.
+                    </DialogContentText>
+                    <TextField
+                      autoFocus
+                      required
+                      margin="dense"
+                      id="listName"
+                      name="listName"
+                      label="Nom de la nouvelle liste"
+                      type="texte"
+                      fullWidth
+                      variant="standard"
+                      onChange={(e) => setNewList(e.target.value)}
+                      value={newList}
+                    />
+                  </DialogContent>
+                  <DialogActions>
+                    <Button onClick={handleCloseCreationDialog}>Annuler</Button>
+                    <Button type="submit">Créer</Button>
+                  </DialogActions>
               </Dialog>
               <Dialog
                 open={openDeletionDialog}
@@ -262,10 +275,8 @@ export default function Home() {
               </Collapse>
             </List>
           </Drawer>
-          </AppBar>
-          <body>
-            <MainView />
-          </body>
-        </>
+      </AppBar>
+      <MainView />
+    </Container>
   );
 }

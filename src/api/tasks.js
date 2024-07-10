@@ -3,6 +3,7 @@ import moment from 'moment';
  //Get les tâches ? d'une liste d'un user, à vérifier si elle fonctionne
  export const displayTasks = async (listId, accessToken) => {
     try {
+        console.log("rentré dans api")
       const response = await fetch(`http://localhost:3000/tasks/tasksByListId${listId}`, 
         {
             method: 'GET',

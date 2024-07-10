@@ -8,6 +8,8 @@ import Typography from '@mui/material/Typography';
 
 
 import Toolbar from '@mui/material/Toolbar';
+import Box from '@mui/material/Box';
+
 import MainView from './MainView';
 
 import List from '@mui/material/List';
@@ -275,7 +277,17 @@ export default function Home() {
             </List>
           </Drawer>
       </AppBar>
-      <MainView />
+      {displaying.listId ? <MainView /> : <Container   
+        maxWidth="90vh"
+        sx={{ 
+        display: "flex",
+        flexDirection: "column",
+        alignItems:"center",
+        justifyContent:"center",
+        height:"90vh",
+        paddingTop:"65px" }}>
+                <Box>Veuillez sélectionner une liste.</Box>
+            </Container>}
     </Container>
   );
 }

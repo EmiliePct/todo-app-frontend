@@ -51,6 +51,8 @@ export default function MainView() {
 
     // ------ Hook d'effet pour stocker les tâches dans un état ------ // 
     useEffect(() => {
+        console.log("rentré dans useeffect")
+
         displayTasks(displaying.listId, user.accessToken)
             .then((data) => {
             if (data) {
@@ -61,7 +63,7 @@ export default function MainView() {
             setError("Échec de la récupération des listes: " + error.message);
             console.error("Erreur API:", error);
             });
-        }, [changesCount, displaying.listId]);
+        }, []);
         
         console.log('tasks',tasks)
 
@@ -105,6 +107,23 @@ const displayUnCompletedTasks = getUncompletedTasks.map((task)  => {
         </AccordionDetails>
     )
   })
+
+
+//     return (
+//         <Container   
+//         maxWidth="90vh" 
+//         sx={{ 
+//             display: "flex",
+//             flexDirection: "column",
+//             alignItems:"center",
+//             justifyContent:"center",
+//             height:"90vh",
+//             paddingTop:"65px" }}>
+//                 <Box>Veuillez sélectionner une liste.</Box>
+//             </Container>
+//     )
+//   }
+
 
   
     return (

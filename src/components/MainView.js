@@ -76,12 +76,6 @@ export default function MainView() {
         const data = await createTask(taskTitle, taskDescription, taskDeadline, user, displaying.listId);
             if (data) {
                 setChangesCount(changesCount+1);
-            console.log(data)
-            // dispatch(signIn({
-            //   userId: data.userId,
-            //   accessToken: data.accessToken,
-            //   isConnected: true,
-            // }));
             } else {
             setError(`${data ? data.error : "Erreur inconnue"}`);
             }
@@ -107,24 +101,6 @@ const displayUnCompletedTasks = getUncompletedTasks.map((task)  => {
         </AccordionDetails>
     )
   })
-
-
-//     return (
-//         <Container   
-//         maxWidth="90vh" 
-//         sx={{ 
-//             display: "flex",
-//             flexDirection: "column",
-//             alignItems:"center",
-//             justifyContent:"center",
-//             height:"90vh",
-//             paddingTop:"65px" }}>
-//                 <Box>Veuillez sélectionner une liste.</Box>
-//             </Container>
-//     )
-//   }
-
-
   
     return (
       <Container   
@@ -139,18 +115,18 @@ const displayUnCompletedTasks = getUncompletedTasks.map((task)  => {
           display="flex"
           justifyContent="space-between"
           alignItems="flex-start"
-          sx={{ bgcolor: "#cfe8fc", height: "auto", width:"100%", padding:"20px"}}>
+          sx={{ bgcolor: "#fff", height: "auto", width:"100%", padding:"20px"}}>
             <Box
               display="flex"
               alignItems="flex-start"
               flexDirection="column"
-              sx={{ bgcolor: "#cfe8fc", height: "100%", width:"45%"}}
+              sx={{ bgcolor: "#fff", height: "100%", width:"45%"}}
               >
                 <TextField
                     required
                     id="taskname-required"
                     label="Nom de la nouvelle tâche"
-                    variant="filled"
+                    variant="outlined"
                     sx={{ marginBottom: "10px"}}
                     fullWidth
                     size="small"
@@ -160,7 +136,7 @@ const displayUnCompletedTasks = getUncompletedTasks.map((task)  => {
                 <TextField
                     id="taskdescription-input"
                     label="Description de la nouvelle tâche"
-                    variant="filled"
+                    variant="outlined"
                     multiline
                     rows={2}
                     size="small"
@@ -171,23 +147,12 @@ const displayUnCompletedTasks = getUncompletedTasks.map((task)  => {
                 />
             </Box>
             <Box
-            //   display="flex"
-            //   flexDirection="column"
-            //   alignItems="space-between"
-              sx={{ bgcolor: "#cfe8fc", height: "100%", width:"45%", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "space-between"}}>
+              sx={{ height: "100%", width:"45%", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "space-between"}}>
                 <DesktopDatePicker
                 label={"Echéance*"}
                 disablePast
                 onChange={settaskDeadline}
                 value={taskDeadline }
-
-                // styles
-                // sx={{
-                //   input: { color: "#fff" },
-                //   border: "1px solid #3F88C5",
-                //   borderRadius: "16px",
-                //   openPickerIcon: { color: "#fff" },
-                // }}
               />
               <Button variant="contained" sx={{ margin: "20px"}} onClick={() => handleSubmit()} >Créer</Button>
             </Box>
@@ -206,7 +171,7 @@ const displayUnCompletedTasks = getUncompletedTasks.map((task)  => {
           flexDirection="column"
           alignItems="space-between"
           sx={{ height: "auto", width:"100%", padding:"20px"}}>
-            <Accordion defaultExpanded>
+            <Accordion defaultExpanded sx={{ bgcolor: '#E9EDEF'}}>
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
           aria-controls="panel1-content"

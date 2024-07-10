@@ -63,7 +63,7 @@ export default function MainView() {
             setError("Échec de la récupération des listes: " + error.message);
             console.error("Erreur API:", error);
             });
-        }, []);
+        }, [displaying.listId]);
         
         console.log('tasks',tasks)
 

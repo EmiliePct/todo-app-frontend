@@ -1,7 +1,5 @@
-import Box from '@mui/material/Box';
 
 import * as React from 'react';
-import ListSubheader from '@mui/material/ListSubheader';
 import List from '@mui/material/List';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
@@ -11,7 +9,6 @@ import CreateNewFolderIcon from '@mui/icons-material/CreateNewFolder';
 import FolderIcon from '@mui/icons-material/Folder';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ChecklistIcon from '@mui/icons-material/Checklist';
-import VisibilityIcon from '@mui/icons-material/Visibility';
 
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
@@ -24,16 +21,12 @@ import DialogTitle from '@mui/material/DialogTitle';
 
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
-import StarBorder from '@mui/icons-material/StarBorder';
 
-import { getLists, displayList, createList, deleteList } from '../api/lists';
+import { getLists, createList, deleteList } from '../api/lists';
 
 import { useEffect, useState, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { displayingList } from '../reducers/displaying';
-
-import { useNavigate } from "react-router-dom";
-
 
 export default function DrawerList(props) {
     
@@ -93,17 +86,13 @@ export default function DrawerList(props) {
 </List>
     )
   })
-
-  console.log('displaying',displaying)
  
   // ------ Afficher une liste en particulier ------ // 
   const handleListDisplay = listId => {
     console.log('click affichage', listId);
     dispatch(displayingList({
       listId
-    }));
-    // navigate("/");
-    //lancer un get et vérifier si re-render de la home pour afficher le contenu
+    }))
   }
   
   // ------ Modale de création de liste ------ //
@@ -162,7 +151,6 @@ export default function DrawerList(props) {
 
   const handleClickConfirmDeletion = () => {
     console.log('click poubelle', listToDelete)
-    //api avec listToDelete et re-render ?
     deleteList(listToDelete, user)
     .then((data) => {
       if (data) {

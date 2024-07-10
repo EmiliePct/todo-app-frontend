@@ -9,10 +9,10 @@ export const displayingSlice = createSlice({
   initialState,
   reducers: {
     displayingList: (state, action) => {
-      console.log('rentré dans reducer')
       state.value.listId = action.payload.listId;
     },
     displayingTask: (state, action) => {
+      console.log('rentré dans reducer avec ', action.payload.taskId)
       state.value.taskId = action.payload.taskId;
     },
     // undisplayTask: (state) => {

@@ -14,14 +14,13 @@ import Button from '@mui/material/Button';
 import { displayTasks, createTask } from '../api/tasks';
 import TaskItemList from './TaskItemList';
 
-
-
 import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import displaying from '@/reducers/displaying';
+import DetailedView from './DetailedView';
 
 //Il faut un texte par défaut
 //Les états pour stocker informations de la nouvelle tâche
@@ -47,12 +46,8 @@ export default function MainView() {
         setChangesCount(changesCount+1)
     )
 
-    console.log('je vais afficher', displaying.listId)
-
     // ------ Hook d'effet pour stocker les tâches dans un état ------ // 
     useEffect(() => {
-        console.log("rentré dans useeffect")
-
         displayTasks(displaying.listId, user.accessToken)
             .then((data) => {
             if (data) {
@@ -63,10 +58,8 @@ export default function MainView() {
             setError("Échec de la récupération des listes: " + error.message);
             console.error("Erreur API:", error);
             });
-        }, [displaying.listId]);
+        }, [displaying.listId, changesCount]);
         
-        console.log('tasks',tasks)
-
     const handleSubmit = async () => {
         console.log(taskTitle, taskDescription, taskDeadline, user)
         if (!taskTitle || !taskDeadline) {
@@ -101,7 +94,8 @@ const displayUnCompletedTasks = getUncompletedTasks.map((task)  => {
         </AccordionDetails>
     )
   })
-  
+
+
     return (
       <Container   
         maxWidth="90vh" 

@@ -1,7 +1,14 @@
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
+import Drawer from '@mui/material/Drawer';
+
 import { updateCompletionTask, updateUnCompletionTask } from '../api/tasks'
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from 'react-redux';
+import { displayingTask } from '../reducers/displaying';
+import React, { Fragment } from "react"
+import DetailedView from './DetailedView';
+
+
 import { useState } from 'react';
 
 
@@ -9,21 +16,34 @@ import { useState } from 'react';
 function TaskItemList(props) {
 
     const user = useSelector(state => state.user.value)
+    const displaying = useSelector(state => state.displaying.value)
+
     const [error, setError] = useState("");
     const [changesCount, setChangesCount] = useState(0)
 
+    const dispatch = useDispatch();
 
-
-    //Couleur de fond différente (à gérer dnas le composant au dessus)
-    //dans une box
-// une icone fait ou pas fait
-//Task Title
-//Task Deadline
-//Bouton en voir Plus
-// Buton marquer comme réalisée (color success / color error)
 
     let button = '';
 
+
+      // Affichage de la right sidebar
+      const [state, setState] = useState({
+        top: false,
+        left: false,
+        bottom: false,
+        right: false,
+      });
+    
+     const toggleDrawer = (anchor, open, id) => (event) => {
+        if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
+          return;
+        }
+
+        handleViewMore(id)
+        setState({ ...state, [anchor]: open });
+      };
+   //
 
     const handleTaskUnCompleted = async (id) => {
         const data = await updateUnCompletionTask(id, user);
@@ -45,7 +65,13 @@ function TaskItemList(props) {
             }
     }
 
-    console.log(props)
+    
+    const handleViewMore = async (taskId) => {
+        console.log('taskId',taskId)
+        dispatch(displayingTask({ taskId }));
+        console.log(displaying)
+    }
+
     if (props.isCompleted) {
         button = (
             <Button 
@@ -80,13 +106,32 @@ function TaskItemList(props) {
         {button}
         <Box>{props.title}</Box>
         <Box>{props.deadline}</Box>
-        <Button 
+        {/* <Button 
         variant="outlined" 
       color="secondary"
       size="small"
-
+      onClick={() => handleViewMore(props.id)}
         >En voir +
-        </Button>
+        </Button> */}
+        <Fragment key='right'>
+          <Button onClick={toggleDrawer('right', true, props.id)}>En voir +</Button>
+          <Drawer
+            anchor='right'
+            size="md"
+            open={state['right']}
+            onClose={toggleDrawer('right', false)}
+          >
+            <Box
+      sx={{ width: 'right' === 'top' || 'right' === 'bottom' ? 'auto' : 250 }}
+      role="presentation"
+      onClick={toggleDrawer('right', false)}
+      onKeyDown={toggleDrawer('right', false)}
+            >
+<DetailedView />
+</Box>
+          </Drawer>
+          </Fragment>
+
     </Box>
 
  )

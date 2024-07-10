@@ -22,6 +22,9 @@ import FolderIcon from '@mui/icons-material/Folder';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ChecklistIcon from '@mui/icons-material/Checklist';
 
+import { signOut } from "../reducers/user";
+
+
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
@@ -133,6 +136,11 @@ export default function Home() {
       console.error("Erreur API:", error);
     });
   };
+
+  // Déconnexion 
+  const handleSignOut = () => {
+    dispatch(signOut());
+  };
   
   // ------ Map des listes à supprimer à afficher les listes dans le sous-menu de "Supprimer" ------ //
 
@@ -189,6 +197,7 @@ export default function Home() {
             >
             To-do App
             </Typography>
+            <Button variant="outlined" sx={{ color: '#fff' }} onClick={handleSignOut}>Déconnexion</Button>
           </Toolbar>
           <Drawer open={openDrawer} onClose={toggleDrawer(false)}>
             <List

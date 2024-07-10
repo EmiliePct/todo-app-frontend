@@ -208,7 +208,7 @@ export default function DrawerList(props) {
       </Dialog>
       <Dialog
         open={openDeletionDialog}
-        onClose={handleCloseCreationDialog}
+        onClose={handleCloseDeletionDialog}
         aria-labelledby="alert-dialog-deletion"      >
         <DialogTitle id="alert-dialog-title">
           {"Voulez-vous vraiment supprimer la liste ?"}
@@ -219,8 +219,8 @@ export default function DrawerList(props) {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleCloseDeletionDialog}>Annuler</Button>
-          <Button onClick={handleClickConfirmDeletion} autoFocus>
+          <Button onClick={handleCloseDeletionDialog()}>Annuler</Button>
+          <Button onClick={handleClickConfirmDeletion()} autoFocus>
             Supprimer la liste et les tâches associées
           </Button>
         </DialogActions>

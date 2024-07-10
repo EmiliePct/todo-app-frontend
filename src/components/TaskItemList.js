@@ -36,6 +36,8 @@ function TaskItemList(props) {
       });
     
      const toggleDrawer = (anchor, open, id) => (event) => {
+        console.log('encore mieux')
+
         if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
           return;
         }
@@ -43,7 +45,7 @@ function TaskItemList(props) {
         handleViewMore(id)
         setState({ ...state, [anchor]: open });
       };
-   //
+
 
     const handleTaskUnCompleted = async (id) => {
         const data = await updateUnCompletionTask(id, user);
@@ -69,7 +71,6 @@ function TaskItemList(props) {
     const handleViewMore = async (taskId) => {
         console.log('taskId',taskId)
         dispatch(displayingTask({ taskId }));
-        console.log(displaying)
     }
 
     if (props.isCompleted) {
@@ -106,13 +107,6 @@ function TaskItemList(props) {
         {button}
         <Box>{props.title}</Box>
         <Box>{props.deadline}</Box>
-        {/* <Button 
-        variant="outlined" 
-      color="secondary"
-      size="small"
-      onClick={() => handleViewMore(props.id)}
-        >En voir +
-        </Button> */}
         <Fragment key='right'>
           <Button onClick={toggleDrawer('right', true, props.id)}>En voir +</Button>
           <Drawer
@@ -127,8 +121,9 @@ function TaskItemList(props) {
       onClick={toggleDrawer('right', false)}
       onKeyDown={toggleDrawer('right', false)}
             >
-<DetailedView />
 </Box>
+<DetailedView />
+
           </Drawer>
           </Fragment>
 

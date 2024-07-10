@@ -12,12 +12,13 @@ export const displayingSlice = createSlice({
       state.value.listId = action.payload.listId;
     },
     displayingTask: (state, action) => {
-      console.log('rentré dans reducer avec ', action.payload.taskId)
+      console.log('rentré dans reducer avec ', action.payload)
       state.value.taskId = action.payload.taskId;
     },
-    // undisplayTask: (state) => {
-    //   state.value.taskId = null;
-    // },
+    undisplayTask: (state) => {
+      console.log('rentré dans reducer undisplayTask')
+      state.value.taskId = null;
+    },
   },
 });
 

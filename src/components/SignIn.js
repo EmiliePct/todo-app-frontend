@@ -4,6 +4,9 @@ import { apiSignIn } from "@/api/users";
 import { useDispatch } from "react-redux";
 import { sign } from 'jsonwebtoken';
 import { signIn } from "../reducers/user";
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
+import Box from '@mui/material/Box';
 
 
 
@@ -36,34 +39,42 @@ function SignIn() {
     }
 
     return (
-      <div className={styles.main}>
-        <div className={styles.loginSection}>
+      <Box
+      sx={{ width: "35%", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center"}}
+>
           <h2>On se connait déjà ?</h2>
-          <input
-            className={styles.inputlogin}
+          <TextField
             type="email"
-            placeholder="Email"
+            variant="standard"
+            label="Email"
+            size="small"
+            fullWidth
+            required
             id="email-signin"
             onChange={(e) => setEmail(e.target.value)}
             value={email}
           />
-          <input
-            className={styles.inputlogin}
+                    <TextField
             type="password"
-            placeholder="Mot de passe"
-            id="password-signin"
+            variant="standard"
+            label="Mot de passe"
+            size="small"
+            
+            fullWidth
+           id="password-signin"
             onChange={(e) => setPwd(e.target.value)}
             value={pwd}
           />
-          <button
-            className={styles.buttonconfirminput}
+          <Button
+                            sx={{margin: "20px"}}
+
+variant="contained"
             id="signIn"
             onClick={() => handleSignIn()}
           >
             Connexion
-          </button>
-        </div>
-      </div>
+          </Button>
+        </Box>
     );
    }
    

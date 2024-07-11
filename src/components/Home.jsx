@@ -1,17 +1,12 @@
-import styles from '../styles/Home.module.css';
+import MainView from './MainView';
 
 import { AppBar } from '@mui/material';
 import Drawer from '@mui/material/Drawer';
 import Container from '@mui/material/Container';
 import MenuIcon from '@mui/icons-material/Menu';
 import Typography from '@mui/material/Typography';
-
-
 import Toolbar from '@mui/material/Toolbar';
 import Box from '@mui/material/Box';
-
-import MainView from './MainView';
-
 import List from '@mui/material/List';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
@@ -21,10 +16,6 @@ import CreateNewFolderIcon from '@mui/icons-material/CreateNewFolder';
 import FolderIcon from '@mui/icons-material/Folder';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ChecklistIcon from '@mui/icons-material/Checklist';
-
-import { signOut } from "../reducers/user";
-
-
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
@@ -32,7 +23,6 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 
@@ -41,6 +31,8 @@ import { getLists, createList, deleteList } from '../api/lists';
 import { useEffect, useState, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { displayingList } from '../reducers/displaying';
+import { signOut } from "../reducers/user";
+
 
 export default function Home() {
   const displaying = useSelector(state => state.displaying.value)
@@ -104,7 +96,6 @@ export default function Home() {
  
   // ------ Afficher une liste en particulier ------ // 
   const handleListDisplay = listId => {
-    console.log('click affichage', listId);
     dispatch(displayingList({ listId }));
     setOpenDrawer(false);
     //lancer un get dans le composant MainView et vérifier si re-render de la home pour afficher le contenu
@@ -113,12 +104,10 @@ export default function Home() {
   // ------ Modale de création de liste ------ //
   
   const handleClickOpenCreationDialog = () => {
-    console.log('click ouverture')
     setOpenCreationDialog(true);
   };
   
   const handleCloseCreationDialog = () => {
-    console.log('click fermeture')
     setOpenCreationDialog(false);
   };
   
@@ -158,13 +147,11 @@ export default function Home() {
   // ------ Modale de suppression de liste ------ //
 
   const handleClickOpenDeletionDialog = (listId) => {
-    console.log('click poubelle ouverture modale', listId)
     setListToDelete(listId)
     setOpenDeletionDialog(true);
   };
 
   const handleCloseDeletionDialog = () => {
-    console.log('click fermeture')
     setListToDelete('')
     setOpenDeletionDialog(false);
   };
@@ -185,118 +172,135 @@ export default function Home() {
   return (
     <Container>
       <AppBar>
-          <Toolbar>
-            <Button onClick={toggleDrawer(true)}>
-              <MenuIcon sx={{ color: '#fff' }}>
-              </MenuIcon>
-            </Button>
-            <Typography
+        <Toolbar>
+          <Button onClick={toggleDrawer(true)}>
+            <MenuIcon sx={{ color: "#fff" }}></MenuIcon>
+          </Button>
+          <Typography
             variant="h6"
             component="div"
-            sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
-            >
+            sx={{ flexGrow: 1, display: { xs: "none", sm: "block" } }}
+          >
             To-do App
-            </Typography>
-            <Button variant="outlined" sx={{ color: '#fff' }} onClick={handleSignOut}>Déconnexion</Button>
-          </Toolbar>
-          <Drawer open={openDrawer} onClose={toggleDrawer(false)}>
-            <List
-              sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
-              component="nav">
-              <Dialog
-                open={openCreationDialog}
-                onClose={handleCloseCreationDialog}
-                PaperProps={{
-                component: 'form',
+          </Typography>
+          <Button
+            variant="outlined"
+            sx={{ color: "#fff" }}
+            onClick={handleSignOut}
+          >
+            Déconnexion
+          </Button>
+        </Toolbar>
+        <Drawer open={openDrawer} onClose={toggleDrawer(false)}>
+          <List
+            sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}
+            component="nav"
+          >
+            <Dialog
+              open={openCreationDialog}
+              onClose={handleCloseCreationDialog}
+              PaperProps={{
+                component: "form",
                 onSubmit: (event) => {
                   event.preventDefault();
-                  setNewList(event.currentTarget)
-                  handleSubmitCreationDialog(newList)
-                }}}
-                >
-                  <DialogTitle>Créer une nouvelle liste</DialogTitle>
-                  <DialogContent>
-                    <DialogContentText>
-                      Veuillez saisir le nom de votre nouvelle liste de tâches. Ce nom doit être unique parmi vos listes.
-                    </DialogContentText>
-                    <TextField
-                      autoFocus
-                      required
-                      margin="dense"
-                      id="listName"
-                      name="listName"
-                      label="Nom de la nouvelle liste"
-                      type="texte"
-                      fullWidth
-                      variant="standard"
-                      onChange={(e) => setNewList(e.target.value)}
-                      value={newList}
-                    />
-                  </DialogContent>
-                  <DialogActions>
-                    <Button onClick={handleCloseCreationDialog}>Annuler</Button>
-                    <Button type="submit">Créer</Button>
-                  </DialogActions>
-              </Dialog>
-              <Dialog
-                open={openDeletionDialog}
-                onClose={handleCloseCreationDialog}
-                aria-labelledby="alert-dialog-deletion"      >
-                <DialogTitle id="alert-dialog-title">
-                  {"Voulez-vous vraiment supprimer la liste ?"}
-                </DialogTitle>
-                <DialogContent>
-                  <DialogContentText id="alert-dialog-description">
-                    La liste que vous tentez de supprimer contient peut-être des tâches. Si vous supprimez cette liste, vous supprimerez également les tâches qu'elle contient.
-                  </DialogContentText>
-                </DialogContent>
-                <DialogActions>
-                  <Button onClick={handleCloseDeletionDialog}>Annuler</Button>
-                  <Button onClick={handleClickConfirmDeletion} autoFocus>
-                    Supprimer la liste et les tâches associées
-                  </Button>
-                </DialogActions>
-              </Dialog>
-              <ListItemButton onClick={handleClickOpenCreationDialog}>
-                <ListItemIcon>
-                  <CreateNewFolderIcon />
-                </ListItemIcon>
-                <ListItemText primary="Créer une liste" />
-              </ListItemButton>
-              <ListItemButton onClick={handleClickDisplayList}>
-                <ListItemIcon>
-                  <FolderIcon />
-                </ListItemIcon>
-                <ListItemText primary="Consulter une liste" />
-                {openDisplayList ? <ExpandLess /> : <ExpandMore />}
-              </ListItemButton>
-              <Collapse in={openDisplayList} timeout="auto" unmountOnExit>
-                {listsForDisplay}
-              </Collapse>
-              <ListItemButton onClick={handleClickDisplayDelete}>
-                <ListItemIcon>
-                  <DeleteIcon />
-                </ListItemIcon>
-                <ListItemText primary="Supprimer une liste" />
-                {openDeleteList ? <ExpandLess /> : <ExpandMore />}
-              </ListItemButton>
-              <Collapse in={openDeleteList} timeout="auto" unmountOnExit>
+                  setNewList(event.currentTarget);
+                  handleSubmitCreationDialog(newList);
+                },
+              }}
+            >
+              <DialogTitle>Créer une nouvelle liste</DialogTitle>
+              <DialogContent>
+                <DialogContentText>
+                  Veuillez saisir le nom de votre nouvelle liste de tâches. Ce
+                  nom doit être unique parmi vos listes.
+                </DialogContentText>
+                <TextField
+                  autoFocus
+                  required
+                  margin="dense"
+                  id="listName"
+                  name="listName"
+                  label="Nom de la nouvelle liste"
+                  type="texte"
+                  fullWidth
+                  variant="standard"
+                  onChange={(e) => setNewList(e.target.value)}
+                  value={newList}
+                />
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={handleCloseCreationDialog}>Annuler</Button>
+                <Button type="submit">Créer</Button>
+              </DialogActions>
+            </Dialog>
+            <Dialog
+              open={openDeletionDialog}
+              onClose={handleCloseCreationDialog}
+              aria-labelledby="alert-dialog-deletion"
+            >
+              <DialogTitle id="alert-dialog-title">
+                {"Voulez-vous vraiment supprimer la liste ?"}
+              </DialogTitle>
+              <DialogContent>
+                <DialogContentText id="alert-dialog-description">
+                  La liste que vous tentez de supprimer contient peut-être des
+                  tâches. Si vous supprimez cette liste, vous supprimerez
+                  également les tâches qu'elle contient.
+                </DialogContentText>
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={handleCloseDeletionDialog}>Annuler</Button>
+                <Button onClick={handleClickConfirmDeletion} autoFocus>
+                  Supprimer la liste et les tâches associées
+                </Button>
+              </DialogActions>
+            </Dialog>
+            <ListItemButton onClick={handleClickOpenCreationDialog}>
+              <ListItemIcon>
+                <CreateNewFolderIcon />
+              </ListItemIcon>
+              <ListItemText primary="Créer une liste" />
+            </ListItemButton>
+            <ListItemButton onClick={handleClickDisplayList}>
+              <ListItemIcon>
+                <FolderIcon />
+              </ListItemIcon>
+              <ListItemText primary="Consulter une liste" />
+              {openDisplayList ? <ExpandLess /> : <ExpandMore />}
+            </ListItemButton>
+            <Collapse in={openDisplayList} timeout="auto" unmountOnExit>
+              {listsForDisplay}
+            </Collapse>
+            <ListItemButton onClick={handleClickDisplayDelete}>
+              <ListItemIcon>
+                <DeleteIcon />
+              </ListItemIcon>
+              <ListItemText primary="Supprimer une liste" />
+              {openDeleteList ? <ExpandLess /> : <ExpandMore />}
+            </ListItemButton>
+            <Collapse in={openDeleteList} timeout="auto" unmountOnExit>
               {listsForDeletion}
-              </Collapse>
-            </List>
-          </Drawer>
+            </Collapse>
+          </List>
+        </Drawer>
       </AppBar>
-      {displaying.listId ? <MainView /> : <Container   
-        maxWidth="90vh"
-        sx={{ 
-        display: "flex",
-        flexDirection: "column",
-        alignItems:"center",
-        justifyContent:"center",
-        height:"90vh",
-        paddingTop:"65px" }}>
-                <Box>Veuillez sélectionner une liste.</Box>
-            </Container>}
+      {displaying.listId ? (
+        <MainView />
+      ) : (
+        <Container
+          maxWidth="90vh"
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            height: "90vh",
+            paddingTop: "65px",
+          }}
+        >
+          <Box>Veuillez sélectionner une liste.</Box>
+        </Container>
+      )}
     </Container>
   );
 }

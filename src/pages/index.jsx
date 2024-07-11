@@ -3,11 +3,11 @@ import Login from '../components/Login';
 import { useSelector } from "react-redux";
 
 export default function Index() {
-  const user = useSelector(state => state.user.value)
+  const user = useSelector((state) => state.user.value);
 
   if (user.isConnected) {
-    return <Home />
+    return <Home />;
   } else {
-    return <Login />
+    return <Login />;
   }
 }

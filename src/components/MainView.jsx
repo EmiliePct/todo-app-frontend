@@ -1,5 +1,3 @@
-import styles from '../styles/MainView.module.css';
-
 import Box from '@mui/material/Box';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 
@@ -16,19 +14,11 @@ import TaskItemList from './TaskItemList';
 
 import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
-import AccordionDetails from '@mui/material/AccordionDetails';
+import AccordionDetails from "@mui/material/AccordionDetails";
 import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import displaying from '@/reducers/displaying';
 import DetailedView from './DetailedView';
-
-//Il faut un texte par défaut
-//Les états pour stocker informations de la nouvelle tâche
-//2 accordéons, un plié l'autre non
-//et le drawer (autre composant ?)
-
-
-
 
 
 export default function MainView() {
@@ -61,7 +51,6 @@ export default function MainView() {
         }, [displaying.listId, changesCount]);
         
     const handleSubmit = async () => {
-        console.log(taskTitle, taskDescription, taskDeadline, user)
         if (!taskTitle || !taskDeadline) {
             setError("Le nom et la date sont obligatoires.");
             return;

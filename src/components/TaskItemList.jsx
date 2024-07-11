@@ -17,17 +17,12 @@ function TaskItemList(props) {
 
     const user = useSelector(state => state.user.value)
     const displaying = useSelector(state => state.displaying.value)
-
     const [error, setError] = useState("");
-    const [changesCount, setChangesCount] = useState(0)
-
     const dispatch = useDispatch();
-
 
     let button = '';
 
-
-      // Affichage de la right sidebar
+      // ------ Affichage de la right sidebar ------ // 
       const [state, setState] = useState({
         top: false,
         left: false,
@@ -36,8 +31,6 @@ function TaskItemList(props) {
       });
     
      const toggleDrawer = (anchor, open, id) => (event) => {
-        console.log('encore mieux')
-
         if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
           return;
         }
@@ -46,11 +39,11 @@ function TaskItemList(props) {
         setState({ ...state, [anchor]: open });
       };
 
+    // ------ Gestion des changements de statut fait/pas fait pour la tâche ------ // 
 
     const handleTaskUnCompleted = async (id) => {
         const data = await updateUnCompletionTask(id, user);
             if (!data.error) {
-            console.log(data)
             props.updateMade();
             } else {
             setError(`${data ? data.error : "Erreur inconnue"}`);
@@ -58,20 +51,15 @@ function TaskItemList(props) {
     }
 
     const handleTaskCompleted = async (id) => {
-        const data = await updateCompletionTask(id, user);
-            if (!data.error) {
-            console.log(data)
-            props.updateMade();
-            } else {
-            setError(`${data ? data.error : "Erreur inconnue"}`);
-            }
+      const data = await updateCompletionTask(id, user);
+      if (!data.error) {
+        props.updateMade();
+      } else {
+        setError(`${data ? data.error : "Erreur inconnue"}`);
+      }
     }
 
-    
-    const handleViewMore = async (taskId) => {
-        console.log('taskId',taskId)
-        dispatch(displayingTask({ taskId }));
-    }
+    // ------ Affichage des boutons pour changer le statut de la tâche ------ // 
 
     if (props.isCompleted) {
         button = (
@@ -94,6 +82,10 @@ function TaskItemList(props) {
             </Button>
         )
     }
+
+    const handleViewMore = async (taskId) => {
+      dispatch(displayingTask({ taskId }));
+  }
 
  return (
     <Box

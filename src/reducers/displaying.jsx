@@ -5,19 +5,14 @@ const initialState = {
 };
 
 export const displayingSlice = createSlice({
-  name: 'displaying',
+  name: "displaying",
   initialState,
   reducers: {
     displayingList: (state, action) => {
       state.value.listId = action.payload.listId;
     },
     displayingTask: (state, action) => {
-      console.log('rentré dans reducer avec ', action.payload)
       state.value.taskId = action.payload.taskId;
-    },
-    undisplayTask: (state) => {
-      console.log('rentré dans reducer undisplayTask')
-      state.value.taskId = null;
     },
   },
 });

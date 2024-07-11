@@ -14,7 +14,6 @@ export const userSlice = createSlice({
       state.value.isConnected = true;
     },
     signOut: (state) => {
-        console.log('rentré dans le reducer')
       state.value.accessToken = null;
       state.value.userId = null;
       state.value.isConnected = false;

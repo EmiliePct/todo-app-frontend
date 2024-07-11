@@ -1,5 +1,3 @@
-
-import * as React from 'react';
 import List from '@mui/material/List';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
@@ -9,7 +7,6 @@ import CreateNewFolderIcon from '@mui/icons-material/CreateNewFolder';
 import FolderIcon from '@mui/icons-material/Folder';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ChecklistIcon from '@mui/icons-material/Checklist';
-
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
@@ -17,25 +14,21 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-
-
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 
 import { getLists, createList, deleteList } from '../api/lists';
 
-import { useEffect, useState, useMemo } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+
 import { displayingList } from '../reducers/displaying';
 
-export default function DrawerList(props) {
+export default function DrawerList() {
     
   const user = useSelector(state => state.user.value)
-  const displaying = useSelector(state => state.displaying.value)
 
   const dispatch = useDispatch();
-  // const navigate = useNavigate();
-
 
   const [openDisplayList, setOpenDisplayList] = useState(true);
   const [openDeleteList, setOpenDeleteList] = useState(false);
@@ -43,9 +36,7 @@ export default function DrawerList(props) {
   const [openDeletionDialog, setOpenDeletionDialog] = useState(false);
   const [newList, setNewList] = useState(''); // input list creation dialog
   const [listToDelete, setListToDelete] = useState();
-
   const [lists, setLists] = useState([]); 
-
   const [error, setError] = useState("");
 
 
@@ -89,7 +80,6 @@ export default function DrawerList(props) {
  
   // ------ Afficher une liste en particulier ------ // 
   const handleListDisplay = listId => {
-    console.log('click affichage', listId);
     dispatch(displayingList({
       listId
     }))
@@ -98,12 +88,10 @@ export default function DrawerList(props) {
   // ------ Modale de création de liste ------ //
   
   const handleClickOpenCreationDialog = () => {
-    console.log('click ouverture')
     setOpenCreationDialog(true);
   };
   
   const handleCloseCreationDialog = () => {
-    console.log('click fermeture')
     setOpenCreationDialog(false);
   };
   
@@ -138,19 +126,16 @@ export default function DrawerList(props) {
   // ------ Modale de suppression de liste ------ //
 
   const handleClickOpenDeletionDialog = (listId) => {
-    console.log('click poubelle ouverture modale', listId)
     setListToDelete(listId)
     setOpenDeletionDialog(true);
   };
 
   const handleCloseDeletionDialog = () => {
-    console.log('click fermeture')
     setListToDelete('')
     setOpenDeletionDialog(false);
   };
 
   const handleClickConfirmDeletion = () => {
-    console.log('click poubelle', listToDelete)
     deleteList(listToDelete, user)
     .then((data) => {
       if (!data.error) {
@@ -166,26 +151,26 @@ export default function DrawerList(props) {
 
   return (
     <List
-      sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
+      sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}
       component="nav"
     >
       <Dialog
-      open={openCreationDialog}
+        open={openCreationDialog}
         onClose={handleCloseCreationDialog}
         PaperProps={{
-          component: 'form',
+          component: "form",
           onSubmit: (event) => {
             event.preventDefault();
-            setNewList(event.currentTarget)
-            handleSubmitCreationDialog(newList)
-
-          }
+            setNewList(event.currentTarget);
+            handleSubmitCreationDialog(newList);
+          },
         }}
       >
         <DialogTitle>Créer une nouvelle liste</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Veuillez saisir le nom de votre nouvelle liste de tâches. Ce nom doit être unique parmi vos listes.
+            Veuillez saisir le nom de votre nouvelle liste de tâches. Ce nom
+            doit être unique parmi vos listes.
           </DialogContentText>
           <TextField
             autoFocus
@@ -209,13 +194,16 @@ export default function DrawerList(props) {
       <Dialog
         open={openDeletionDialog}
         onClose={handleCloseDeletionDialog}
-        aria-labelledby="alert-dialog-deletion"      >
+        aria-labelledby="alert-dialog-deletion"
+      >
         <DialogTitle id="alert-dialog-title">
           {"Voulez-vous vraiment supprimer la liste ?"}
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            La liste que vous tentez de supprimer contient peut-être des tâches. Si vous supprimez cette liste, vous supprimerez également les tâches qu'elle contient.
+            La liste que vous tentez de supprimer contient peut-être des tâches.
+            Si vous supprimez cette liste, vous supprimerez également les tâches
+            qu'elle contient.
           </DialogContentText>
         </DialogContent>
         <DialogActions>
@@ -226,8 +214,6 @@ export default function DrawerList(props) {
         </DialogActions>
       </Dialog>
       <ListItemButton onClick={handleClickOpenCreationDialog}>
-
-      
         <ListItemIcon>
           <CreateNewFolderIcon />
         </ListItemIcon>
@@ -252,7 +238,7 @@ export default function DrawerList(props) {
         {openDeleteList ? <ExpandLess /> : <ExpandMore />}
       </ListItemButton>
       <Collapse in={openDeleteList} timeout="auto" unmountOnExit>
-      {listsForDeletion}
+        {listsForDeletion}
       </Collapse>
     </List>
   );

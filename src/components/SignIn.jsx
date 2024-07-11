@@ -28,11 +28,13 @@ function SignIn() {
       }
       const data = await apiSignIn(email, pwd);
         if (!data.error) {
-          dispatch(signIn({
-            userId: data.userId,
-            accessToken: data.accessToken,
-            isConnected: true,
-          }));
+          dispatch(
+            signIn({
+              userId: data.userId,
+              accessToken: data.accessToken,
+              isConnected: true,
+            })
+          );
         } else {
           setError(`Login failed: ${data ? data.error : "Erreur inconnue"}`);
         }

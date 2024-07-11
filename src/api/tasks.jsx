@@ -3,7 +3,6 @@ import moment from 'moment';
  //Get les tâches d'une liste d'un user
  export const displayTasks = async (listId, accessToken) => {
     try {
-        console.log("rentré dans api get all")
       const response = await fetch(`http://localhost:3000/tasks/tasksByListId${listId}`, 
         {
             method: 'GET',
@@ -21,14 +20,14 @@ import moment from 'moment';
    //Get les informations d'une tâche d'un user - à tester
   export const displaySingleTask = async (taskId, accessToken) => {
     try {
-        console.log("rentré dans api get one")
-      const response = await fetch(`http://localhost:3000/tasks/taskByTaskId${taskId}`, 
+      const response = await fetch(
+        `http://localhost:3000/tasks/taskByTaskId${taskId}`,
         {
-            method: 'GET',
-            mode: 'cors',
-            headers: { "Authorization": `Bearer ${accessToken}` },
-          }
-      )
+          method: "GET",
+          mode: "cors",
+          headers: { Authorization: `Bearer ${accessToken}` },
+        }
+      );
       const data = await response.json();
       return data;
     } catch (error) {
@@ -125,8 +124,6 @@ import moment from 'moment';
     taskId, user
   ) => {
     try {
-      console.log("rentré dans api avec", taskId, user)
-
       const response = await fetch(
         `http://localhost:3000/tasks/${taskId}`,
         {

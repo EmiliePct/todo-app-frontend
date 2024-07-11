@@ -15,23 +15,7 @@ export const getLists = async (userId, accessToken) => {
     }
   };
 
-  //Get les tâches ? d'une liste d'un user, à vérifier si elle fonctionne
-  export const displayList = async (listId, accessToken) => {
-    try {
-        console.log("rentré dans Api")
-      const response = await fetch(`http://localhost:3000/lists/${listId}`, 
-        {
-            method: 'GET',
-            mode: 'cors',
-            headers: { "Authorization": `Bearer ${accessToken}` },
-          }
-      )
-      const data = await response.json();
-      return data;
-    } catch (error) {
-      console.log(error);
-    }
-  };
+ 
 
   // Post création d'une nouvelle liste
   export const createList = async (
@@ -61,21 +45,15 @@ export const getLists = async (userId, accessToken) => {
   };
 
   // DELETE suppression d'une liste et des tâches associées
-  export const deleteList = async (
-    listId, user
-  ) => {
+  export const deleteList = async (listId, user) => {
     try {
-      const response = await fetch(
-        `http://localhost:3000/lists/${listId}`,
-        {
-          method: "delete",
-          headers: 
-          {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${user.accessToken}`,
-          },
-        }
-      );
+      const response = await fetch(`http://localhost:3000/lists/${listId}`, {
+        method: "delete",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user.accessToken}`,
+        },
+      });
       const data = await response.json();
       return data;
     } catch (error) {

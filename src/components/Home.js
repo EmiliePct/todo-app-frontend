@@ -77,7 +77,7 @@ export default function Home() {
   useEffect(() => {
     getLists(user.userId, user.accessToken)
       .then((data) => {
-        if (data) {
+        if (!data.error) {
           setLists(data);
         }
       })
@@ -127,7 +127,7 @@ export default function Home() {
     setNewList('');
     createList(title, user)
     .then((data) => {
-      if (data) {
+      if (!data.error) {
         handleCloseCreationDialog();
       }
     })
@@ -172,7 +172,7 @@ export default function Home() {
   const handleClickConfirmDeletion = () => {
     deleteList(listToDelete, user)
     .then((data) => {
-      if (data) {
+      if (!data.error) {
         handleCloseDeletionDialog();
       }
     })

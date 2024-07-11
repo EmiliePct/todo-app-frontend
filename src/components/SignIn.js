@@ -27,7 +27,7 @@ function SignIn() {
         return;
       }
       const data = await apiSignIn(email, pwd);
-        if (data) {
+        if (!data.error) {
           dispatch(signIn({
             userId: data.userId,
             accessToken: data.accessToken,

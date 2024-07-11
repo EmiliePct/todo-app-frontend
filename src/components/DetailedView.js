@@ -1,5 +1,7 @@
 import Box from '@mui/material/Box';
 import React, { Fragment } from "react"
+import moment from 'moment';
+
 
 import { useEffect, useState } from 'react';
 
@@ -38,7 +40,7 @@ export default function DetailedView(props) {
 
         displaySingleTask(displaying.taskId, user.accessToken)
             .then((data) => {
-            if (data) {
+            if (!data.error) {
                 setTask(data);
                 setTaskToDelete(data.id);
                 console.log('data recue',data)
@@ -65,7 +67,7 @@ export default function DetailedView(props) {
     console.log('click poubelle', displaying)
     deleteTask(taskToDelete, user)
     .then((data) => {
-      if (data) {
+      if (!data.error) {
         handleCloseDeletionDialog();
       }
     })
@@ -74,14 +76,42 @@ export default function DetailedView(props) {
       console.error("Erreur API:", error);
     });
   };
+
+  // formatage date
+
+  const convertedTaskDeadline = moment(task.deadline).format('L')
+  const convertedTaskCreationDate = moment(task.createdAt).format('L')
+
+
           return (
-            <Box>
-                {task.title}, {task.description}, {task.deadline}
-                <Tooltip title="Delete">
-                <IconButton>
+            <Box
+            sx={{display: "flex", flexDirection: "column", margin: "30px"}}
+                >
+                <Box
+                sx={{marginTop: "30px"}}>
+                Nom de la tâche :<br />{task.title}
+                </Box>
+                <Box
+                sx={{marginTop: "30px"}}>
+                Description de la tâche :<br />{task.description}
+                </Box>
+                <Box
+                sx={{marginTop: "30px"}}>
+                Echéance :<br />{convertedTaskDeadline}
+                </Box>
+                <Box
+                sx={{marginTop: "30px"}}>
+                Tâche créée le :<br />{convertedTaskCreationDate}
+                </Box>
+                <Box
+                            sx={{display: "flex", justifyContent: "center", margin: "30px"}}>
+                                                <Tooltip title="Delete">
+                <IconButton                 
+                >
                     <DeleteIcon onClick={() => handleClickOpenDeletionDialog()}/>
                 </IconButton>
                 </Tooltip>
+                </Box>
                 <Dialog
         open={openDeletionDialog}
         onClose={handleCloseDeletionDialog}

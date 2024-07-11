@@ -62,7 +62,7 @@ export default function DrawerList(props) {
   useEffect(() => {
     getLists(user.userId, user.accessToken)
       .then((data) => {
-        if (data) {
+        if (!data.error) {
           setLists(data);
         }
       })
@@ -112,7 +112,7 @@ export default function DrawerList(props) {
     setNewList('');
     createList(title, user)
     .then((data) => {
-      if (data) {
+      if (!data.error) {
         handleCloseCreationDialog();
       }
     })
@@ -153,7 +153,7 @@ export default function DrawerList(props) {
     console.log('click poubelle', listToDelete)
     deleteList(listToDelete, user)
     .then((data) => {
-      if (data) {
+      if (!data.error) {
         handleCloseDeletionDialog();
       }
     })

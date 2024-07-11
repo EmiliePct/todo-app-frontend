@@ -50,7 +50,7 @@ export default function MainView() {
     useEffect(() => {
         displayTasks(displaying.listId, user.accessToken)
             .then((data) => {
-            if (data) {
+            if (!data.error) {
                 setTasks(data);
             }
             })
@@ -67,7 +67,7 @@ export default function MainView() {
             return;
         }
         const data = await createTask(taskTitle, taskDescription, taskDeadline, user, displaying.listId);
-            if (data) {
+            if (!data.error) {
                 setChangesCount(changesCount+1);
             } else {
             setError(`${data ? data.error : "Erreur inconnue"}`);

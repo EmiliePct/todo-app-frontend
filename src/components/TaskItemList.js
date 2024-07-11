@@ -49,7 +49,7 @@ function TaskItemList(props) {
 
     const handleTaskUnCompleted = async (id) => {
         const data = await updateUnCompletionTask(id, user);
-            if (data) {
+            if (!data.error) {
             console.log(data)
             props.updateMade();
             } else {
@@ -59,7 +59,7 @@ function TaskItemList(props) {
 
     const handleTaskCompleted = async (id) => {
         const data = await updateCompletionTask(id, user);
-            if (data) {
+            if (!data.error) {
             console.log(data)
             props.updateMade();
             } else {

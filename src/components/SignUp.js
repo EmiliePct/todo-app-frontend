@@ -3,6 +3,8 @@ import { useState, useEffect } from "react";
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
+import { apiSignUp } from "../api/users";
+
 
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -36,27 +38,23 @@ function SignUp() {
 
     // Mettre un message de succès comme quoi il peut se connecter ?
 
-    const handleSignUp = () => {
-        console.log(            {first_name: first_name,
-            surname: surname,
-            email: email,
-            pwd: pwd});
-        fetch("http://localhost:3000/auth/signup", {
-          method: "POST",
-          headers: { "Content-Type": "application/json"},
-          body: JSON.stringify({
-            first_name: first_name,
-            surname: surname,
-            email: email,
-            pwd: pwd,
-          }),
-        })
-          .then((response) => response.json())
-          .then((data) => {
-            console.log(data)
-            });
+    const handleSignUp = async () => {
+      console.log(            {first_name: first_name,
+        surname: surname,
+        email: email,
+        pwd: pwd});
+      const data = await apiSignUp(first_name,
+        surname,
+        email,
+        pwd);
+      if (!data.error || !data.message) {
+        console.log(data)
+        setUserHasRegistered(true);
 
-            setUserHasRegistered(true);
+      } else {
+        setError(`Sign up failed: ${data ? data.error : "Erreur inconnue"}`);
+      }
+
       };
 
       if (userHasRegistered === false) {
@@ -154,7 +152,8 @@ variant="contained"
 
       } else {
         return (
-        <Box>
+        <Box
+        sx={{   width: "35%"}}>
             <p>Bravo vous avez créé votre compte ! Vous pouvez maintenant vous connecter.</p>
         </Box>
         )

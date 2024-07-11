@@ -18,8 +18,6 @@ import AccordionDetails from "@mui/material/AccordionDetails";
 import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import displaying from '@/reducers/displaying';
-import DetailedView from './DetailedView';
-
 
 export default function MainView() {
     const user = useSelector(state => state.user.value)

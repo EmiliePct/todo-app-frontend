@@ -1,5 +1,3 @@
-import MainView from './MainView';
-
 import { AppBar } from '@mui/material';
 import Drawer from '@mui/material/Drawer';
 import Container from '@mui/material/Container';
@@ -32,6 +30,8 @@ import { useEffect, useState, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { displayingList } from '../reducers/displaying';
 import { signOut } from "../reducers/user";
+
+import MainView from './MainView';
 
 
 export default function Home() {
@@ -128,6 +128,7 @@ export default function Home() {
 
   // Déconnexion 
   const handleSignOut = () => {
+    dispatch(displayingList({listId: null}))
     dispatch(signOut());
   };
   
